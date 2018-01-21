@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">DeutschLernen</string>
+    <string name="choose_words">Choose how to show words</string>
+    <string name="choose_from_lessons">Choose from lessons</string>
+    <string name="choose_random">Random</string>
+    <string name="add_new_word">Add new word</string>
+    <string name="add_word">Add</string>
+    <string name="enter_definiter_artikel">Enter the \"Defineter Artikel\"</string>
+    <string name="enter_word">Enter the word</string>
+    <string name="enter_plural">Choose the plural form</string>
+    <string name="enter_translation">Enter translation of the word</string>
+    <string name="choose_plural_form">Choose the plural form</string>
+    <string name="choose_lesson">Choose lesson</string>
+
+    <string-array name="plural_forms">
+        <item>-e</item>
+        <item>"-e</item>
+        <item>-en</item>
+        <item>-r</item>
+        <item>-s</item>
+        <item>-er</item>
+        <item>-n</item>
+        <item>"-</item>
+        <item>/</item>
+        <item>Plural</item>
+        <item>Singular</item>
+    </string-array>
+
+    <string-array name="lessons">
+        <item>Willkommen</item>
+        <item>Alte Heimat, neue Heimat</item>
+        <item>Häuser und Wohnungen</item>
+        <item>Familienleben</item>
+        <item>Det Tag und die Woche</item>
+        <item>Guten Appetit</item>
+        <item>Arbeit und Beruf</item>
+        <item>Gute Besserung</item>
+        <item>Wege durch die Stadt</item>
+        <item>Mein Leben</item>
+        <item>Ämter und Behörden</item>
+        <item>Im Kaufhaus</item>
+        <item>Auf Reisen</item>
+        <item>Zusammen leben</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="select_der">der</string>
+    <string name="select_die">die</string>
+    <string name="select_das">das</string>
+</resources>

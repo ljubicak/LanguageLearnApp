@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.example.ljubica.deutschlernen.AddNewWord">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_definiter_artikel"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/definiter_artikel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_word"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_plural"/>
+    <Spinner android:id="@+id/plural_forms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/plural_forms"
+        android:prompt="@string/choose_plural_form"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_translation"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/word_translation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_plural"/>
+    <Spinner android:id="@+id/lessons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/lessons"
+        android:prompt="@string/choose_lesson"/>
+    <Button
+        android:id="@+id/btn_add_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_word"
+        android:onClick="addWord"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+
+</LinearLayout>
