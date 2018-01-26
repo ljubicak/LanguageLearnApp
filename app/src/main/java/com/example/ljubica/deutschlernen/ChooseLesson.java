@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +104,10 @@ public class ChooseLesson extends Fragment {
 
                 ArrayList<Word> words = dbHelper.getDataByLesson(lessonName);
 
+                if(words.size() == 0){
+                    Toast.makeText(getContext(), "The collection is empty!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("lessonName",lessonName);
 
