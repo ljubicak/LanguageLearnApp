@@ -12,6 +12,12 @@
     <string name="choose_plural_form">Choose the plural form</string>
     <string name="choose_lesson">Choose lesson</string>
 
+    <string-array name="definite_articles">
+        <item>der</item>
+        <item>die</item>
+        <item>das</item>
+    </string-array>
+
     <string-array name="plural_forms">
         <item>-e</item>
         <item>"-e</item>

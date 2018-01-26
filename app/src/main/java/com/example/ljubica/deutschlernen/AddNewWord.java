@@ -4,10 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 
 /**
@@ -19,14 +22,10 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class AddNewWord extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Button addNewWord;
+    private DBHelper dbHelper;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,8 +45,6 @@ public class AddNewWord extends Fragment {
     public static AddNewWord newInstance(String param1, String param2) {
         AddNewWord fragment = new AddNewWord();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,9 +52,8 @@ public class AddNewWord extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbHelper = new DBHelper(getContext());
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -92,22 +88,34 @@ public class AddNewWord extends Fragment {
         mListener = null;
     }
 
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//
-//        Button showChooseSource = (Button) getView().findViewById(
-//                R.id.Button2);
-//        showFragment1 .setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//
-//                getFragmentManager().popBackStack();
-//            }
-//        });
-//
-//    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        addNewWord = (Button) getView().findViewById(
+                R.id.btn_add_word);
+        addNewWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Spinner definiterArtikel = (Spinner) getView().findViewById(R.id.definiter_artikel);
+                AppCompatEditText word = (AppCompatEditText) getView().findViewById(R.id.word);
+
+                Spinner pluralForm = (Spinner) getView().findViewById(R.id.plural_forms);
+
+                AppCompatEditText translation = (AppCompatEditText) getView().findViewById(R.id.word_translation);
+                Spinner lesson = (Spinner) getView().findViewById(R.id.lessons);
+
+                String wordStr = word.getText().toString().substring(0, 1).toUpperCase() + word.getText().toString().substring(1).toLowerCase();
+                String translationStr = translation.getText().toString().substring(0,1).toUpperCase() + translation.getText().toString().substring(1).toString().toLowerCase();
+
+                dbHelper.insertWord(definiterArtikel.getSelectedItem().toString().toLowerCase(), wordStr, pluralForm.getSelectedItem().toString(), translationStr, lesson.getSelectedItem().toString());
+
+                Toast.makeText(getContext(), "New word added!", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

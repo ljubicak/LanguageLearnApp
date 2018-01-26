@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
+
 
 public class MainActivity extends AppCompatActivity
 implements ChooseSourceFragment.OnFragmentInteractionListener,
@@ -27,6 +29,7 @@ implements ChooseSourceFragment.OnFragmentInteractionListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Stetho.initializeWithDefaults(this);
         dbHelper = new DBHelper(this);
         if (findViewById(R.id.fragment_placeholder) != null) {
 

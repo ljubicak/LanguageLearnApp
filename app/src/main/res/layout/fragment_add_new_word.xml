@@ -12,10 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/enter_definiter_artikel"/>
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/definiter_artikel"
+    <Spinner android:id="@+id/definiter_artikel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:entries="@array/definite_articles"
+        android:prompt="@string/enter_definiter_artikel"/>
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_word"
-        android:onClick="addWord"
         android:layout_gravity="center_vertical|center_horizontal"/>
 
 </LinearLayout>
