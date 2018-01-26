@@ -105,13 +105,22 @@ public class AddNewWord extends Fragment {
                 AppCompatEditText translation = (AppCompatEditText) getView().findViewById(R.id.word_translation);
                 Spinner lesson = (Spinner) getView().findViewById(R.id.lessons);
 
-                String wordStr = word.getText().toString().substring(0, 1).toUpperCase() + word.getText().toString().substring(1).toLowerCase();
-                String translationStr = translation.getText().toString().substring(0,1).toUpperCase() + translation.getText().toString().substring(1).toString().toLowerCase();
+                if(word.getText().toString() == null || word.getText().toString().equals("")){
+                    word.setError("Please enter the word");
+                    word.setHint("Please enter the word");
+                }
+                else if(translation.getText().toString() == null || translation.getText().toString().equals("")){
+                    translation.setError("Please enter the translation of the word");
+                    translation.setHint("Please enter the translation of the word");
+                }else {
+                    String wordStr = word.getText().toString().substring(0, 1).toUpperCase() + word.getText().toString().substring(1).toLowerCase();
+                    String translationStr = translation.getText().toString().substring(0, 1).toUpperCase() + translation.getText().toString().substring(1).toString().toLowerCase();
 
-                dbHelper.insertWord(definiterArtikel.getSelectedItem().toString().toLowerCase(), wordStr, pluralForm.getSelectedItem().toString(), translationStr, lesson.getSelectedItem().toString());
+                    dbHelper.insertWord(definiterArtikel.getSelectedItem().toString().toLowerCase(), wordStr, pluralForm.getSelectedItem().toString(), translationStr, lesson.getSelectedItem().toString());
 
-                Toast.makeText(getContext(), "New word added!", Toast.LENGTH_SHORT).show();
-                getActivity().getSupportFragmentManager().popBackStack();
+                    Toast.makeText(getContext(), "New word added!", Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
         });
 
