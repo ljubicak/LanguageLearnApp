@@ -2,8 +2,10 @@ package com.example.ljubica.deutschlernen;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ public class ShowWords extends Fragment {
     private ArrayList<Word> words; //list of words to be shown
     private Integer wordPointer = 0;
     private String lessonName;
+    private Handler handler;
 
     private OnFragmentInteractionListener mListener;
     private Button selectDer;
@@ -93,7 +96,10 @@ public class ShowWords extends Fragment {
         //get the words from db
         words = lessonName != null? dbHelper.getDataByLesson(lessonName) : dbHelper.getAllWords();
         Collections.shuffle(words);
+
         //intialize components
+        handler = new Handler();
+
         selectDer = (Button) getView().findViewById(
                 R.id.select_der);
         selectDie = (Button) getView().findViewById(
@@ -107,51 +113,24 @@ public class ShowWords extends Fragment {
         selectDer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getWordArtikel(v).trim().equals("der")){
-                    selectDer.setBackgroundColor(Color.GREEN);
-                    selectDas.setBackgroundColor(Color.TRANSPARENT);
-                    selectDie.setBackgroundColor(Color.TRANSPARENT);
-                    displayWords();
-                }
-                else{
-                    selectDer.setBackgroundColor(Color.RED);
-                    selectDas.setBackgroundColor(Color.TRANSPARENT);
-                    selectDie.setBackgroundColor(Color.TRANSPARENT);
-                }
+                Boolean isCorrect = getWordArtikel(v).trim().equals("der");
+                toggleButtons(selectDer, isCorrect, selectDas, selectDie);
             }
         });
 
         selectDie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getWordArtikel(v).equals("die")){
-                    selectDie.setBackgroundColor(Color.GREEN);
-                    selectDer.setBackgroundColor(Color.TRANSPARENT);
-                    selectDas.setBackgroundColor(Color.TRANSPARENT);
-                    displayWords();
-                }
-                else{
-                    selectDie.setBackgroundColor(Color.RED);
-                    selectDer.setBackgroundColor(Color.TRANSPARENT);
-                    selectDas.setBackgroundColor(Color.TRANSPARENT);
-                }
+                Boolean isCorrect = getWordArtikel(v).trim().equals("die");
+                toggleButtons(selectDie, isCorrect, selectDer, selectDas);
             }
         });
 
         selectDas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getWordArtikel(v).trim().equals("das")){
-                    selectDas.setBackgroundColor(Color.GREEN);
-                    selectDie.setBackgroundColor(Color.TRANSPARENT);
-                    selectDer.setBackgroundColor(Color.TRANSPARENT);
-                    displayWords();
-                }
-                else{
-                    selectDas.setBackgroundColor(Color.RED);
-                    selectDie.setBackgroundColor(Color.TRANSPARENT);
-                    selectDer.setBackgroundColor(Color.TRANSPARENT);
-                }
+                Boolean isCorrect = getWordArtikel(v).trim().equals("das");
+                toggleButtons(selectDas, isCorrect, selectDer, selectDie);
             }
         });
     }
@@ -172,14 +151,6 @@ public class ShowWords extends Fragment {
     }
 
     //helpers
-    private void displayWords(){
-        if(wordPointer >= words.size())
-            return;
-        TextView showWod = (TextView) getView().findViewById(R.id.show_word);
-        Word word = words.get(wordPointer);
-        showWod.setText(word.getWord());
-        wordPointer++;
-    }
     private String getWordArtikel(View v){
         String textWord = ((TextView)getView().findViewById(R.id.show_word)).getText().toString();
         Word foundWord = filterWords(textWord);
@@ -195,4 +166,37 @@ public class ShowWords extends Fragment {
         }
         return foundWord;
     }
+    private void toggleButtons(Button btnClicked, Boolean isCorrect, Button btn1, Button btn2){
+        if(isCorrect){
+            btnClicked.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.MULTIPLY);
+            btn1.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+            btn2.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+            displayWords();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resetButtons();
+                }
+            }, 200);
+        }else{
+            btnClicked.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.MULTIPLY);
+            btn1.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+            btn2.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+
+        }
+    }
+    private void displayWords(){
+        if(wordPointer >= words.size())
+            return;
+        TextView showWod = (TextView) getView().findViewById(R.id.show_word);
+        Word word = words.get(wordPointer);
+        showWod.setText(word.getWord());
+        wordPointer++;
+    }
+    private void resetButtons(){
+        selectDer.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+        selectDie.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+        selectDas.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+    }
+
 }
