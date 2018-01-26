@@ -24,7 +24,12 @@ import android.widget.Toast;
 public class AddNewWord extends Fragment {
     private Button addNewWord;
     private DBHelper dbHelper;
-
+    private String selectedWord;
+    private AppCompatEditText word;
+    private Spinner definiterArtikel;
+    private Spinner pluralForm;
+    private AppCompatEditText translation;
+    private Spinner lesson;
 
 
     private OnFragmentInteractionListener mListener;
@@ -37,11 +42,8 @@ public class AddNewWord extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AddNewWord.
      */
-    // TODO: Rename and change types and number of parameters
     public static AddNewWord newInstance(String param1, String param2) {
         AddNewWord fragment = new AddNewWord();
         Bundle args = new Bundle();
@@ -54,6 +56,8 @@ public class AddNewWord extends Fragment {
         super.onCreate(savedInstanceState);
         dbHelper = new DBHelper(getContext());
         if (getArguments() != null) {
+            Bundle args = getArguments();
+            selectedWord = args.getString("selectedWord");
         }
     }
 
@@ -64,7 +68,6 @@ public class AddNewWord extends Fragment {
         return inflater.inflate(R.layout.fragment_add_new_word, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -91,19 +94,22 @@ public class AddNewWord extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //initialize components
+        definiterArtikel = (Spinner) getView().findViewById(R.id.definiter_artikel);
+        word = (AppCompatEditText) getView().findViewById(R.id.word);
+        pluralForm = (Spinner) getView().findViewById(R.id.plural_forms);
+        translation = (AppCompatEditText) getView().findViewById(R.id.word_translation);
+        lesson = (Spinner) getView().findViewById(R.id.lessons);
+        addNewWord = (Button) getView().findViewById(R.id.btn_add_word);
 
-        addNewWord = (Button) getView().findViewById(
-                R.id.btn_add_word);
+        //set EditText to the selectedWord
+        if(selectedWord != null)
+            word.setText(selectedWord);
+
+        //set onClickListeners
         addNewWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Spinner definiterArtikel = (Spinner) getView().findViewById(R.id.definiter_artikel);
-                AppCompatEditText word = (AppCompatEditText) getView().findViewById(R.id.word);
-
-                Spinner pluralForm = (Spinner) getView().findViewById(R.id.plural_forms);
-
-                AppCompatEditText translation = (AppCompatEditText) getView().findViewById(R.id.word_translation);
-                Spinner lesson = (Spinner) getView().findViewById(R.id.lessons);
 
                 if(word.getText().toString() == null || word.getText().toString().equals("")){
                     word.setError("Please enter the word");
@@ -119,7 +125,16 @@ public class AddNewWord extends Fragment {
                     dbHelper.insertWord(definiterArtikel.getSelectedItem().toString().toLowerCase(), wordStr, pluralForm.getSelectedItem().toString(), translationStr, lesson.getSelectedItem().toString());
 
                     Toast.makeText(getContext(), "New word added!", Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    if(selectedWord != null){
+                        ChooseSourceFragment chooseSourceFragment = new ChooseSourceFragment();
+
+                        // In case this activity was started with special instructions from an
+                        // Intent, pass the Intent's extras to the fragment as arguments
+                        chooseSourceFragment.setArguments(getActivity().getIntent().getExtras());
+                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_activity, chooseSourceFragment).commit();
+                    }else{
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
                 }
             }
         });

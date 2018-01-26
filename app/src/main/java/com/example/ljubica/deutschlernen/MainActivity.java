@@ -1,5 +1,6 @@
 package com.example.ljubica.deutschlernen;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
@@ -22,15 +23,24 @@ implements ChooseSourceFragment.OnFragmentInteractionListener,
         ShowWords.OnFragmentInteractionListener{
     DBHelper dbHelper;
 
-    ChooseSourceFragment chooseSourceFragment;
+    private ChooseSourceFragment chooseSourceFragment;
+    private AddNewWord addNewWord;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(this); //see the db in chrome
+
+        CharSequence selectedWord = getIntent().getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT); //open selected text
+        if(selectedWord != null){
+            addNewWordFromSelectedText(selectedWord.toString());
+            return;
+        }
+
         dbHelper = new DBHelper(this);
+
         if (findViewById(R.id.fragment_placeholder) != null) {
 
             // However, if we're being restored from a previous state,
@@ -67,18 +77,18 @@ implements ChooseSourceFragment.OnFragmentInteractionListener,
     protected void addNewWord(View v){
     }
 
-    protected void addWord(View v){
-        AppCompatEditText definiterArtikel = (AppCompatEditText) findViewById(R.id.definiter_artikel);
-        AppCompatEditText word = (AppCompatEditText) findViewById(R.id.word);
+    //Helpers
+    private void addNewWordFromSelectedText(String word){
+        addNewWord = new AddNewWord();
+        if (findViewById(R.id.fragment_placeholder) != null) {
+            // Pass the selected word to the fragment as arguments
+            Bundle bundle = new Bundle();
+            bundle.putString("selectedWord", word);
+            addNewWord.setArguments(bundle);
 
-        Spinner pluralForm = (Spinner) findViewById(R.id.plural_forms);
-
-        AppCompatEditText translation = (AppCompatEditText) findViewById(R.id.word_translation);
-        Spinner lesson = (Spinner) findViewById(R.id.lessons);
-
-        dbHelper.insertWord(definiterArtikel.getText().toString(), word.getText().toString(), pluralForm.getSelectedItem().toString(), translation.getText().toString(), lesson.getSelectedItem().toString());
-
-        Toast.makeText(this, "New word added!", Toast.LENGTH_SHORT).show();
-        getSupportFragmentManager().popBackStack();
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.main_activity, addNewWord).commit();
+        }
     }
 }
