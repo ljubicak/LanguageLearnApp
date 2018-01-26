@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -34,13 +36,22 @@ public class ShowWords extends Fragment {
     private DBHelper dbHelper;
     private ArrayList<Word> words; //list of words to be shown
     private Integer wordPointer = 0;
+    private Integer prevWordPointer = 0;
     private String lessonName;
     private Handler handler;
+    private Integer increaseProgres;
+    private Integer correctWordsNum = 0;
+    private Integer incorrectWordsNum = 0;
 
     private OnFragmentInteractionListener mListener;
     private Button selectDer;
     private Button selectDie;
     private Button selectDas;
+    private TextView correctWords;
+    private TextView incorrectWords;
+    private Button repeat;
+    private Button goBack;
+    private ProgressBar progressBar;
 
     public ShowWords() {
         // Required empty public constructor
@@ -99,6 +110,14 @@ public class ShowWords extends Fragment {
 
         //intialize components
         handler = new Handler();
+        correctWords = (TextView) getView().findViewById(R.id.percent_correct_words);
+        incorrectWords = (TextView) getView().findViewById(R.id.percent_incorrect_words);
+        repeat = (Button) getView().findViewById(R.id.repeat);
+        goBack = (Button) getView().findViewById(R.id.goBack);
+        progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        progressBar.setMax(words.size());
+        progressBar.setProgress(0);
+        increaseProgres = Integer.valueOf(1/words.size());
 
         selectDer = (Button) getView().findViewById(
                 R.id.select_der);
@@ -131,6 +150,19 @@ public class ShowWords extends Fragment {
             public void onClick(View v) {
                 Boolean isCorrect = getWordArtikel(v).trim().equals("das");
                 toggleButtons(selectDas, isCorrect, selectDer, selectDie);
+            }
+        });
+
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restart();
+            }
+        });
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
     }
@@ -168,10 +200,17 @@ public class ShowWords extends Fragment {
     }
     private void toggleButtons(Button btnClicked, Boolean isCorrect, Button btn1, Button btn2){
         if(isCorrect){
+            if(prevWordPointer != wordPointer)
+                correctWordsNum++;
+
             btnClicked.getBackground().setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.MULTIPLY);
             btn1.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
             btn2.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
             displayWords();
+
+            //increment progress bar
+            progressBar.incrementProgressBy(1);
+
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -179,24 +218,61 @@ public class ShowWords extends Fragment {
                 }
             }, 200);
         }else{
+            prevWordPointer = wordPointer;
+
             btnClicked.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.MULTIPLY);
             btn1.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
             btn2.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
-
         }
     }
     private void displayWords(){
-        if(wordPointer >= words.size())
+        if(wordPointer >= words.size()){
+            DecimalFormat df = new DecimalFormat("####0.00");
+            Double perCorrectWords = correctWordsNum*100.0/words.size();
+            Double perIncorrectWords = 100-perCorrectWords;
+
+            String perCorrectWordsDStr = df.format(perCorrectWords) + "%";
+            String perIncorrectWordsStr = df.format(perIncorrectWords) + "%";
+
+            correctWords.setText(perCorrectWordsDStr);
+            incorrectWords.setText(perIncorrectWordsStr);
+
+            correctWords.setVisibility(View.VISIBLE);
+            incorrectWords.setVisibility(View.VISIBLE);
+
+            if(perCorrectWords < 90) {
+                repeat.setVisibility(View.VISIBLE);
+            }
+            goBack.setVisibility(View.VISIBLE);
             return;
+        }
         TextView showWod = (TextView) getView().findViewById(R.id.show_word);
         Word word = words.get(wordPointer);
         showWod.setText(word.getWord());
+        prevWordPointer = wordPointer;
         wordPointer++;
     }
     private void resetButtons(){
         selectDer.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
         selectDie.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
         selectDas.getBackground().setColorFilter(getResources().getColor(R.color.grey), PorterDuff.Mode.MULTIPLY);
+    }
+
+    private void restart(){
+        Collections.shuffle(words);
+        wordPointer = 0;
+        prevWordPointer = 0;
+        correctWordsNum = 0;
+        incorrectWordsNum = 0;
+
+        repeat.setVisibility(View.INVISIBLE);
+        goBack.setVisibility(View.INVISIBLE);
+
+        correctWords.setVisibility(View.INVISIBLE);
+        incorrectWords.setVisibility(View.INVISIBLE);
+
+        progressBar.setProgress(0);
+        displayWords();
     }
 
 }

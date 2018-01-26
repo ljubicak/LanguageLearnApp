@@ -11,6 +11,8 @@
     <string name="enter_translation">Enter translation of the word</string>
     <string name="choose_plural_form">Choose the plural form</string>
     <string name="choose_lesson">Choose lesson</string>
+    <string name="repeat">Repeat</string>
+    <string name="go_back">Go back</string>
 
     <string-array name="definite_articles">
         <item>der</item>
