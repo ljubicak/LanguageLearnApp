@@ -25,6 +25,7 @@ public class ChooseSourceFragment extends Fragment {
     private Button chooseFromLessons;
     private Button chooseRandomWords;
     private Button translation;
+    private Button writing;
 
     public ChooseSourceFragment() {
         // Required empty public constructor
@@ -79,6 +80,7 @@ public class ChooseSourceFragment extends Fragment {
         chooseRandomWords = (Button) getView().findViewById(
                 R.id.btn_choose_random_words);
         translation = (Button)getView().findViewById(R.id.btn_translation);
+        writing = (Button) getView().findViewById(R.id.btn_writing);
 
         //add listeners
         showAddNewWord.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +116,14 @@ public class ChooseSourceFragment extends Fragment {
                 Translation translation = new Translation();
                 getFragmentManager().beginTransaction().replace(R.id.main_activity, translation)
                         .addToBackStack("TRANSLATION").commit();
+            }
+        });
+        writing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WritingFragment writingFragment = new WritingFragment();
+                getFragmentManager().beginTransaction().replace(R.id.main_activity, writingFragment)
+                        .addToBackStack("WRITING").commit();
             }
         });
     }

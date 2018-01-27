@@ -40,4 +40,11 @@
         android:text="Translation"
         android:onClick="translation"
         android:layout_gravity="center_horizontal|center_vertical"/>
+    <Button
+        android:id="@+id/btn_writing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Writing"
+        android:onClick="writing"
+        android:layout_gravity="center_horizontal|center_vertical"/>
 </LinearLayout>

@@ -14,25 +14,8 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Translation.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Translation#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Translation extends Fragment implements View.OnClickListener{
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-
-    private String mParam1;
-    private String mParam2;
 
     private Button btnGerman1;
     private Button btnEnglish1;
@@ -59,10 +42,6 @@ public class Translation extends Fragment implements View.OnClickListener{
 
     public static Translation newInstance(String param1, String param2) {
         Translation fragment = new Translation();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -70,10 +49,6 @@ public class Translation extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHelper = new DBHelper(getContext());
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         clickedGermanWord = "";
     }
@@ -159,14 +134,6 @@ public class Translation extends Fragment implements View.OnClickListener{
     }
 
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -184,18 +151,8 @@ public class Translation extends Fragment implements View.OnClickListener{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -223,9 +180,12 @@ public class Translation extends Fragment implements View.OnClickListener{
         ArrayList<String> germanWords = new ArrayList<>();
         ArrayList<String> englishWords = new ArrayList<>();
 
-        for(Word word: words){
-            germanWords.add(word.getWord());
-            englishWords.add(word.getPluralForm());
+        for(int i=0;i<5;i++){
+            if(words.size()>i){
+                germanWords.add(words.get(i).getWord());
+                englishWords.add(words.get(i).getPluralForm());
+            }
+
         }
 
         Collections.shuffle(englishWords);

@@ -20,7 +20,8 @@ import com.facebook.stetho.Stetho;
 public class MainActivity extends AppCompatActivity
 implements ChooseSourceFragment.OnFragmentInteractionListener,
         AddNewWord.OnFragmentInteractionListener, ChooseLesson.OnFragmentInteractionListener,
-        ShowWords.OnFragmentInteractionListener, Translation.OnFragmentInteractionListener{
+        ShowWords.OnFragmentInteractionListener, Translation.OnFragmentInteractionListener,
+        WritingFragment.OnFragmentInteractionListener{
     DBHelper dbHelper;
 
     private ChooseSourceFragment chooseSourceFragment;
